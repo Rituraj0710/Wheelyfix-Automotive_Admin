@@ -1,7 +1,9 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import path from 'path'
 
 export default defineConfig(() => ({
+  base: '/admin/',
   server: {
     host: '::',
     port: 8090,
@@ -14,7 +16,25 @@ export default defineConfig(() => ({
       },
     },
   },
+  build: {
+    outDir: path.resolve(__dirname, '../Wheelyfix-Frontend/dist/admin'),
+    emptyOutDir: false,
+    rollupOptions: {
+      input: path.resolve(__dirname, 'index.html'),
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          admin: ['react-router-dom', 'lucide-react', 'recharts', 'framer-motion'],
+        },
+      },
+    },
+  },
   plugins: [react()],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
 }))
 
 
