@@ -30,7 +30,7 @@ export default function Pricing() {
   }
 
   const remove = async (r: Rule) => {
-    await api.delete('/pricing', { body: JSON.stringify({ scope: r.scope, refId: r.refId }) } as any)
+    await api.delete('/pricing', { scope: r.scope, refId: r.refId })
     await load()
   }
 

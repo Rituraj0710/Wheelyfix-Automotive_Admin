@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { Phone, Mail, MapPin, Facebook, Twitter, Instagram, Linkedin, Github } from 'lucide-react'
 
 export default function FooterBar() {
+  const logoSrc = `${import.meta.env.BASE_URL}images/wheelyfix-logo.png`
   return (
     <motion.footer 
       className="footer"
@@ -11,13 +12,16 @@ export default function FooterBar() {
     >
       <div className="footer-content">
         <div className="footer-section">
-          <motion.h3 
-            className="footer-title"
-            whileHover={{ color: '#3b82f6' }}
-            transition={{ duration: 0.3 }}
-          >
-            Wheelyfix Automotive
-          </motion.h3>
+          <div className="footer-brand">
+            <img src={logoSrc} alt="Wheelyfix" className="brand-logo" />
+            <motion.h3 
+              className="footer-title"
+              whileHover={{ color: '#3b82f6' }}
+              transition={{ duration: 0.3 }}
+            >
+              Wheelyfix Automotive
+            </motion.h3>
+          </div>
           <p className="footer-description">
             Your trusted partner for automotive excellence. We provide comprehensive 
             vehicle services with cutting-edge technology and expert technicians.

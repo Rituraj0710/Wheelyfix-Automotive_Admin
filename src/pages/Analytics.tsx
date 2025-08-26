@@ -108,6 +108,9 @@ export default function Analytics() {
         transition={{ duration: 0.6 }}
       >
         <div className="hero-content">
+          <div className="hero-brand">
+            <img src={`${import.meta.env.BASE_URL}images/wheelyfix-logo.png`} alt="Wheelyfix" className="brand-logo large" />
+          </div>
           <h1>Analytics Dashboard</h1>
           <p>Monitor your automotive business performance with real-time insights</p>
         </div>
@@ -194,7 +197,7 @@ export default function Analytics() {
                 <XAxis dataKey="date" />
                 <YAxis />
                 <Tooltip />
-                <Line type="monotone" dataKey="revenue" stroke="#2563eb" strokeWidth={2} dot={false} />
+                <Line type="monotone" dataKey="revenue" stroke="#f59e0b" strokeWidth={2} dot={false} />
               </LineChart>
             </ResponsiveContainer>
           </div>

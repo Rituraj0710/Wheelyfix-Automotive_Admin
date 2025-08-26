@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { Settings, LogOut, Sun, Moon, Bell, User, Search } from 'lucide-react'
 
 export default function HeaderBar({ title, right }: { title?: string; right?: React.ReactNode }) {
+  const logoSrc = `${import.meta.env.BASE_URL}images/wheelyfix-logo.png`
   return (
     <motion.div 
       className="header" 
@@ -10,17 +11,6 @@ export default function HeaderBar({ title, right }: { title?: string; right?: Re
       transition={{ duration: 0.4, ease: "easeOut" }}
     >
       <div className="header-left">
-        <motion.div 
-          className="logo-container"
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.2 }}
-        >
-          <div className="logo-icon">🚗</div>
-          <div className="logo-text">
-            <span className="logo-title">WHEELYFIX</span>
-            <span className="logo-subtitle">Admin Panel</span>
-          </div>
-        </motion.div>
         {title && (
           <motion.div 
             className="page-title"
