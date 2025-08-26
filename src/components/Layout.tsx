@@ -81,9 +81,7 @@ export default function Layout() {
           <NavLink to="/pricing" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>
             <IndianRupee className="nav-icon" /> Pricing
           </NavLink>
-          <NavLink to="/cms" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>
-            <FileText className="nav-icon" /> CMS
-          </NavLink>
+          {/* CMS removed per request */}
           <NavLink to="/bookings" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>
             <CalendarDays className="nav-icon" /> Bookings
           </NavLink>
@@ -97,11 +95,10 @@ export default function Layout() {
             <FileText className="nav-icon" /> Audit Log
           </NavLink>
         </nav>
-        <div className="sidebar-footer">
-          <button className="logout-btn" onClick={handleLogout}>
-            <LogOut className="nav-icon" /> Logout
-          </button>
-        </div>
+        {/* Move Logout into main nav for full-width visibility */}
+        <button className="nav-link" onClick={handleLogout}>
+          <LogOut className="nav-icon" /> Logout
+        </button>
       </aside>
       <div className="main">
         <HeaderBar 
