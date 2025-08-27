@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { api } from '../lib/api'
+import { EmptyPlaceholder, ErrorPlaceholder, LoadingPlaceholder } from '../components/Placeholder'
 import { TableToolbar, useTableTools } from '../components/TableTools'
 
 type Fuel = 'petrol' | 'diesel' | 'cng'
@@ -63,8 +64,8 @@ export default function Brands() {
     await load()
   }
 
-  if (loading) return <div>Loading...</div>
-  if (error) return <div className="card" style={{ color: '#b91c1c', background: '#fef2f2' }}>{error}</div>
+  if (loading) return <LoadingPlaceholder label="Loading brands..." />
+  if (error) return <ErrorPlaceholder message={error} />
 
   return (
     <div className="grid" style={{ gridTemplateColumns: '1fr 420px', gap: 16 }}>
@@ -85,6 +86,9 @@ export default function Brands() {
         </div>
 
         <div className="card">
+          {tools.filtered.length === 0 ? (
+            <EmptyPlaceholder title="No brands" message="Try switching vehicle type, search, or add a new brand." />
+          ) : (
           <table className="table">
             <thead>
               <tr><th>Name</th><th>Slug</th><th>Models</th><th></th></tr>
@@ -107,6 +111,7 @@ export default function Brands() {
               ))}
             </tbody>
           </table>
+          )}
         </div>
       </div>
 

@@ -42,9 +42,9 @@ export function TableToolbar({ title, search, setSearch, onRefresh, onExport }: 
     <div className="toolbar">
       <h2>{title}</h2>
       <div style={{ display: 'flex', gap: 8 }}>
-        <input placeholder="Search..." value={search} onChange={(e) => setSearch(e.target.value)} />
-        <button className="btn" onClick={onRefresh}>Refresh</button>
-        <button className="btn" onClick={onExport}>Export CSV</button>
+        <input placeholder="Search by name, id, or text" value={search} onChange={(e) => setSearch(e.target.value)} aria-label="Search table rows" />
+        <button className="btn" onClick={onRefresh} title="Reload the latest data from the server" aria-label="Refresh table data">Refresh</button>
+        <button className="btn" onClick={onExport} title="Download the current table as a CSV file" aria-label="Export table as CSV">Export CSV</button>
       </div>
     </div>
   )

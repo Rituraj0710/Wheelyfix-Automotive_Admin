@@ -53,20 +53,20 @@ export function DataTable<T extends { _id?: string | number }>(
       {pagination && (
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 12 }}>
           <div>
-            <label>Rows per page: </label>
-            <select value={pagination.limit} onChange={e => pagination.onLimitChange(Number(e.target.value))}>
+            <label htmlFor="rows-per-page">Rows per page: </label>
+            <select id="rows-per-page" value={pagination.limit} onChange={e => pagination.onLimitChange(Number(e.target.value))} aria-label="Rows per page selector">
               <option value={10}>10</option>
               <option value={20}>20</option>
               <option value={50}>50</option>
             </select>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <button className="btn" disabled={pagination.page <= 1} onClick={() => pagination.onPageChange(pagination.page - 1)}>Prev</button>
-            <span>Page {pagination.page} of {Math.max(1, Math.ceil(pagination.total / pagination.limit))}</span>
-            <button className="btn" disabled={pagination.page >= Math.ceil(pagination.total / pagination.limit)} onClick={() => pagination.onPageChange(pagination.page + 1)}>Next</button>
+            <button className="btn" disabled={pagination.page <= 1} onClick={() => pagination.onPageChange(pagination.page - 1)} aria-label="Go to previous page">Prev</button>
+            <span aria-live="polite">Page {pagination.page} of {Math.max(1, Math.ceil(pagination.total / pagination.limit))}</span>
+            <button className="btn" disabled={pagination.page >= Math.ceil(pagination.total / pagination.limit)} onClick={() => pagination.onPageChange(pagination.page + 1)} aria-label="Go to next page">Next</button>
           </div>
           <div>
-            <span>Total: {pagination.total}</span>
+            <span aria-label="Total row count">Total: {pagination.total}</span>
           </div>
         </div>
       )}

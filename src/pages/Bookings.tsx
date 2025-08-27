@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { api } from '../lib/api'
+import { EmptyPlaceholder, ErrorPlaceholder, LoadingPlaceholder } from '../components/Placeholder'
 import { TableToolbar, useTableTools } from '../components/TableTools'
 
 interface Booking { _id: string; name: string; email: string; phoneNumber: string; vehicleType: string; vehicleModel: string; serviceType: string; date: string; timeSlot: string; status: 'upcoming'|'completed'|'cancelled'; createdAt: string }
@@ -29,13 +30,16 @@ export default function Bookings() {
   }
 
   const tools = useTableTools(items, { searchText: (b) => `${b.name} ${b.email} ${b.serviceType}`, sortKey: (b) => new Date(b.createdAt).getTime() }, 'desc')
-  if (loading) return <div>Loading...</div>
-  if (error) return <div className="card" style={{ color: '#b91c1c', background: '#fef2f2' }}>{error}</div>
+  if (loading) return <LoadingPlaceholder label="Loading bookings..." />
+  if (error) return <ErrorPlaceholder message={error} />
 
   return (
     <div>
       <TableToolbar title="Bookings" search={tools.search} setSearch={tools.setSearch} onRefresh={load} onExport={() => tools.exportCSV('bookings.csv')} />
       <div className="card">
+        {tools.filtered.length === 0 ? (
+          <EmptyPlaceholder title="No bookings found" message="Try refreshing or adjusting your search." />
+        ) : (
         <table className="table">
           <thead>
             <tr><th>Customer</th><th>Vehicle</th><th>Service</th><th>Date</th><th>Status</th><th></th></tr>
@@ -52,7 +56,7 @@ export default function Bookings() {
                 <td>{new Date(b.date).toLocaleString()}</td>
                 <td><span className="badge">{b.status}</span></td>
                 <td>
-                  <select value={b.status} onChange={(e) => changeStatus(b._id, e.target.value as Booking['status'])}>
+                  <select value={b.status} onChange={(e) => changeStatus(b._id, e.target.value as Booking['status'])} aria-label="Change booking status">
                     <option value="upcoming">upcoming</option>
                     <option value="completed">completed</option>
                     <option value="cancelled">cancelled</option>
@@ -62,6 +66,7 @@ export default function Bookings() {
             ))}
           </tbody>
         </table>
+        )}
       </div>
     </div>
   )

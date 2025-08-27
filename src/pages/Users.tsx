@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { api } from '../lib/api'
+import { EmptyPlaceholder, ErrorPlaceholder, LoadingPlaceholder } from '../components/Placeholder'
 import { TableToolbar, useTableTools } from '../components/TableTools'
 
 interface User { _id: string; name: string; email: string; isAdmin: boolean; createdAt?: string }
@@ -29,13 +30,16 @@ export default function Users() {
   }
 
   const tools = useTableTools(users, { searchText: (u) => `${u.name} ${u.email}`, sortKey: (u) => u.name || '' })
-  if (loading) return <div>Loading...</div>
-  if (error) return <div className="card" style={{ color: '#b91c1c', background: '#fef2f2' }}>{error}</div>
+  if (loading) return <LoadingPlaceholder label="Loading users..." />
+  if (error) return <ErrorPlaceholder message={error} />
 
   return (
     <div>
       <TableToolbar title="Users" search={tools.search} setSearch={tools.setSearch} onRefresh={load} onExport={() => tools.exportCSV('users.csv')} />
       <div className="card">
+        {tools.filtered.length === 0 ? (
+          <EmptyPlaceholder title="No users" message="No users matched your search." />
+        ) : (
         <table className="table">
           <thead>
             <tr><th>Name</th><th>Email</th><th>Role</th><th>Actions</th></tr>
@@ -48,15 +52,16 @@ export default function Users() {
                 <td><span className="badge">{u.isAdmin ? 'admin' : 'user'}</span></td>
                 <td>
                   {u.isAdmin ? (
-                    <button className="btn" onClick={() => changeRole(u._id, false)}>Make user</button>
+                    <button className="btn" onClick={() => changeRole(u._id, false)} aria-label={`Change ${u.name}'s role to user`} title="Demote to standard user">Make user</button>
                   ) : (
-                    <button className="btn" onClick={() => changeRole(u._id, true)}>Make admin</button>
+                    <button className="btn" onClick={() => changeRole(u._id, true)} aria-label={`Change ${u.name}'s role to admin`} title="Promote to admin">Make admin</button>
                   )}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+        )}
       </div>
     </div>
   )

@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { api } from '../lib/api'
 import { DataTable, Column } from '../components/DataTable'
+import { EmptyPlaceholder, ErrorPlaceholder, LoadingPlaceholder } from '../components/Placeholder'
 import { TableToolbar } from '../components/TableTools'
 
 interface AuditItem { _id: string; actorEmail?: string; action: string; entity: string; entityId: string; createdAt: string; metadata?: any }
@@ -43,8 +44,8 @@ export default function AuditLogPage() {
 
   useEffect(() => { load() }, [query])
 
-  if (loading) return <div>Loading...</div>
-  if (error) return <div className="card" style={{ color: '#b91c1c', background: '#fef2f2' }}>{error}</div>
+  if (loading) return <LoadingPlaceholder label="Loading audit logs..." />
+  if (error) return <ErrorPlaceholder message={error} />
 
   return (
     <div>
@@ -60,6 +61,9 @@ export default function AuditLogPage() {
         URL.revokeObjectURL(url)
       }} />
 
+      {items.length === 0 ? (
+        <EmptyPlaceholder title="No audit events" message="No activity found for the current filters." />
+      ) : (
       <DataTable
         columns={[
           { key: 'createdAt', header: 'Time', render: (r: AuditItem) => new Date(r.createdAt).toLocaleString(), sortable: false },
@@ -71,6 +75,7 @@ export default function AuditLogPage() {
         rows={items}
         pagination={{ page, limit, total, onPageChange: (p) => setPage(Math.max(1, p)), onLimitChange: (n) => { setPage(1); setLimit(n) } }}
       />
+      )}
     </div>
   )
 }

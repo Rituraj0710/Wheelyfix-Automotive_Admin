@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 import { api } from '../lib/api'
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, PieChart, Pie, Cell } from 'recharts'
@@ -17,6 +17,7 @@ import {
   LineChart as LineChartIcon,
   RefreshCw
 } from 'lucide-react'
+import { ErrorPlaceholder, LoadingPlaceholder } from '../components/Placeholder'
 
 export default function Analytics() {
   const [users, setUsers] = useState<any[]>([])
@@ -71,7 +72,7 @@ export default function Analytics() {
   }, [services, bookings, payments])
 
   const recentActivity = useMemo(() => {
-    const activities = []
+    const activities: { id: string; type: 'booking'|'payment'|'service'|'user'; message: string; time: string; user: string }[] = []
     
     // Add recent bookings
     bookings.slice(0, 3).forEach(booking => {
@@ -98,6 +99,10 @@ export default function Analytics() {
     return activities.sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()).slice(0, 4)
   }, [bookings, payments, services, users])
 
+  if (loading && users.length === 0 && bookings.length === 0 && payments.length === 0 && services.length === 0) {
+    return <LoadingPlaceholder label="Loading analytics..." />
+  }
+
   return (
     <div className="analytics-page">
       {/* Hero Section */}
@@ -109,7 +114,7 @@ export default function Analytics() {
       >
         <div className="hero-content">
           <div className="hero-brand">
-            <img src={`${import.meta.env.BASE_URL}images/wheelyfix-logo.png`} alt="Wheelyfix" className="brand-logo large" />
+            <img src="/images/wheelyfix-logo.png" alt="Wheelyfix" className="brand-logo large" />
           </div>
           <h1>Analytics Dashboard</h1>
           <p>Monitor your automotive business performance with real-time insights</p>

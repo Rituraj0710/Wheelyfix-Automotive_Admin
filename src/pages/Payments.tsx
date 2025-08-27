@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { api } from '../lib/api'
+import { EmptyPlaceholder, ErrorPlaceholder, LoadingPlaceholder } from '../components/Placeholder'
 import { TableToolbar, useTableTools } from '../components/TableTools'
 
 interface Payment { _id: string; orderId?: string; paymentId?: string; amount: number; currency: string; status: 'created'|'paid'|'failed'; createdAt: string; user?: { name?: string; email?: string } }
@@ -27,13 +28,16 @@ export default function Payments() {
   useEffect(() => { load() }, [])
 
   const tools = useTableTools(items, { searchText: (p) => `${p.orderId || ''} ${p.paymentId || ''} ${p.user?.email || ''}`, sortKey: (p) => new Date(p.createdAt).getTime() }, 'desc')
-  if (loading) return <div>Loading...</div>
-  if (error) return <div className="card" style={{ color: '#b91c1c', background: '#fef2f2' }}>{error}</div>
+  if (loading) return <LoadingPlaceholder label="Loading payments..." />
+  if (error) return <ErrorPlaceholder message={error} />
 
   return (
     <div>
       <TableToolbar title="Payments" search={tools.search} setSearch={tools.setSearch} onRefresh={load} onExport={() => tools.exportCSV('payments.csv')} />
       <div className="card">
+        {tools.filtered.length === 0 ? (
+          <EmptyPlaceholder title="No payments" message="No payments to show for current filters." />
+        ) : (
         <table className="table">
           <thead>
             <tr><th>Order</th><th>Payment</th><th>Customer</th><th>Amount</th><th>Status</th><th>Created</th></tr>
@@ -54,6 +58,7 @@ export default function Payments() {
             ))}
           </tbody>
         </table>
+        )}
       </div>
     </div>
   )

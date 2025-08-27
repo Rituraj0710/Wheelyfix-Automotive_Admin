@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { api } from '../lib/api'
+import { LoadingPlaceholder } from '../components/Placeholder'
 
 export default function Settings() {
   const [conn, setConn] = useState<any>(null)
@@ -17,6 +18,8 @@ export default function Settings() {
   useEffect(() => { load() }, [])
 
   const dbStateText = (s?: number) => s === 1 ? 'connected' : s === 2 ? 'connecting' : s === 3 ? 'disconnecting' : 'disconnected'
+
+  if (!conn && !payCfg) return <LoadingPlaceholder label="Loading settings..." />
 
   return (
     <div>

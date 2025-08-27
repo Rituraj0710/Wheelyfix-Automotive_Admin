@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { api } from '../lib/api'
+import { EmptyPlaceholder, ErrorPlaceholder, LoadingPlaceholder } from '../components/Placeholder'
 
 interface Rule { _id?: string; scope: 'service'|'brand'|'model'; refId: string; price: number; currency?: string; metadata?: any }
 
@@ -34,8 +35,8 @@ export default function Pricing() {
     await load()
   }
 
-  if (loading) return <div>Loading...</div>
-  if (error) return <div className="card" style={{ color: '#b91c1c', background: '#fef2f2' }}>{error}</div>
+  if (loading) return <LoadingPlaceholder label="Loading pricing rules..." />
+  if (error) return <ErrorPlaceholder message={error} />
 
   return (
     <div className="grid" style={{ gridTemplateColumns: '420px 1fr', gap: 16 }}>
@@ -61,6 +62,9 @@ export default function Pricing() {
       </div>
 
       <div className="card">
+        {rules.length === 0 ? (
+          <EmptyPlaceholder title="No pricing rules" message="Add a rule from the form on the left." />
+        ) : (
         <table className="table">
           <thead>
             <tr><th>Scope</th><th>Ref</th><th>Price</th><th></th></tr>
@@ -76,6 +80,7 @@ export default function Pricing() {
             ))}
           </tbody>
         </table>
+        )}
       </div>
     </div>
   )
